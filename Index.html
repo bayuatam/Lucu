@@ -1,0 +1,2188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="page-title">Taman Bunga & Kucing Lucu Untukmu 🌸</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --pink-soft: #fff0f6;
+      --pink-card: rgba(255, 255, 255, 0.92);
+      --pink-accent: #ff5c8a;
+      --pink-dark: #d6336c;
+      --text-main: #4a2545;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(180deg, #ffe5ec 0%, #fff0f6 45%, #e8f8f5 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1, h2, h3, .font-cute {
+      font-family: 'Fredoka', sans-serif;
+    }
+
+    /* Partikel Latar Belakang */
+    #ambient-particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .ambient-item {
+      position: absolute;
+      bottom: -30px;
+      animation: floatAmbient linear infinite;
+      opacity: 0.7;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    @keyframes floatAmbient {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      15% {
+        opacity: 0.75;
+      }
+      100% {
+        transform: translateY(-110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Percikan Saat Layar Disentuh */
+    .tap-spark {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      font-size: 18px;
+      animation: tapPop 0.85s ease-out forwards;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    @keyframes tapPop {
+      0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-50%, -95px) scale(1.35);
+        opacity: 0;
+      }
+    }
+
+    /* Kartu Glassmorphism */
+    .kawaii-card {
+      background: var(--pink-card);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border: 2px solid #ffffff;
+      border-radius: 28px;
+      box-shadow: 0 12px 30px rgba(255, 92, 138, 0.14);
+    }
+
+    /* Kanvas Taman Bunga */
+    #garden-canvas {
+      position: relative;
+      height: 310px;
+      border-radius: 24px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: background 0.8s ease;
+      border: 3px solid #ffffff;
+      box-shadow: inset 0 -10px 25px rgba(45, 106, 79, 0.15);
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .sky-morning {
+      background: linear-gradient(180deg, #bde0fe 0%, #e0fbfc 58%, #95d5b2 58%, #74c69d 100%);
+    }
+
+    .sky-sunset {
+      background: linear-gradient(180deg, #ff9ebb 0%, #ffd6a5 58%, #74c69d 58%, #52b788 100%);
+    }
+
+    .sky-night {
+      background: linear-gradient(180deg, #1d1e42 0%, #3a3d7c 58%, #2d6a4f 58%, #1b4332 100%);
+    }
+
+    /* Pelangi di Taman Bunga */
+    #garden-rainbow {
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%) scale(0.95);
+      width: 260px;
+      height: 130px;
+      border-radius: 130px 130px 0 0;
+      background: radial-gradient(
+        circle at 50% 100%,
+        transparent 52%,
+        rgba(155, 93, 229, 0.45) 54%,
+        rgba(0, 187, 249, 0.45) 59%,
+        rgba(0, 245, 212, 0.45) 64%,
+        rgba(254, 228, 64, 0.5) 69%,
+        rgba(255, 133, 161, 0.5) 74%,
+        transparent 76%
+      );
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      z-index: 4;
+    }
+
+    #garden-rainbow.visible {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+
+    /* Bunga yang Tumbuh */
+    .planted-flower {
+      position: absolute;
+      transform: translateX(-50%);
+      transform-origin: bottom center;
+      animation: growFlower 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, swayFlower 3.2s ease-in-out infinite 0.55s;
+      cursor: pointer;
+      z-index: 10;
+      transition: filter 0.3s ease;
+    }
+
+    .sky-night .planted-flower {
+      filter: drop-shadow(0 0 8px rgba(255, 243, 176, 0.75));
+    }
+
+    @keyframes growFlower {
+      0% {
+        transform: translateX(-50%) scale(0);
+      }
+      100% {
+        transform: translateX(-50%) scale(1);
+      }
+    }
+
+    @keyframes swayFlower {
+      0%, 100% {
+        transform: translateX(-50%) rotate(-3deg);
+      }
+      50% {
+        transform: translateX(-50%) rotate(3deg);
+      }
+    }
+
+    /* Kupu-kupu & Kunang-kunang */
+    .garden-critter {
+      position: absolute;
+      pointer-events: none;
+      z-index: 15;
+      animation: flutterAround 9s ease-in-out infinite;
+    }
+
+    @keyframes flutterAround {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+      }
+      25% {
+        transform: translate(35px, -25px) scale(1.1);
+      }
+      50% {
+        transform: translate(-25px, -40px) scale(0.95);
+      }
+      75% {
+        transform: translate(20px, -15px) scale(1.05);
+      }
+    }
+
+    /* Efek Siram & Sihir */
+    .floating-fx {
+      position: absolute;
+      pointer-events: none;
+      z-index: 30;
+      font-size: 22px;
+      animation: riseFade 0.9s ease-out forwards;
+    }
+
+    @keyframes riseFade {
+      0% {
+        transform: translate(-50%, 0) scale(0.7);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-50%, -45px) scale(1.3);
+        opacity: 0;
+      }
+    }
+
+    /* Animasi Kucing Mochi */
+    .mochi-jump {
+      animation: mochiBounce 0.55s ease;
+    }
+
+    @keyframes mochiBounce {
+      0%, 100% { transform: translateY(0) scale(1); }
+      40% { transform: translateY(-16px) scale(1.06, 0.94); }
+      70% { transform: translateY(-4px) scale(0.97, 1.03); }
+    }
+
+    .mochi-wiggle {
+      animation: mochiTickle 0.45s ease-in-out 2;
+    }
+
+    @keyframes mochiTickle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-9deg) scale(1.05); }
+      75% { transform: rotate(9deg) scale(1.05); }
+    }
+
+    /* Tombol Lucu */
+    .btn-pill {
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .btn-pill:active {
+      transform: scale(0.94);
+    }
+
+    .tool-active {
+      background-color: #ff5c8a !important;
+      color: #ffffff !important;
+      box-shadow: 0 6px 14px rgba(255, 92, 138, 0.35);
+    }
+
+    /* Animasi Biskuit Keberuntungan Cinta */
+    .cookie-shell {
+      transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .cookie-cracked .cookie-left {
+      transform: translateX(-14px) rotate(-16deg);
+    }
+
+    .cookie-cracked .cookie-right {
+      transform: translateX(14px) rotate(16deg);
+    }
+
+    /* Tombol Pop-It Kawaii */
+    .popit-bubble {
+      aspect-ratio: 1 / 1;
+      border-radius: 9999px;
+      background: radial-gradient(circle at 35% 35%, #ffccd5, #ff758f);
+      box-shadow: 0 5px 0 #d6336c, inset 0 2px 4px rgba(255, 255, 255, 0.75);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.2s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .popit-bubble.popped {
+      transform: translateY(4px) scale(0.93);
+      background: radial-gradient(circle at 50% 50%, #f3d5e0, #ffc2d1);
+      box-shadow: inset 0 3px 6px rgba(164, 19, 60, 0.25);
+    }
+
+    /* Animasi Peluk Virtual Terbang */
+    .affection-fly {
+      position: fixed;
+      bottom: 18%;
+      font-size: 34px;
+      pointer-events: none;
+      z-index: 9998;
+      animation: flyAffection 1.4s ease-out forwards;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    @keyframes flyAffection {
+      0% {
+        transform: translate(-50%, 0) scale(0.6);
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+        transform: translate(-50%, -25px) scale(1.2);
+      }
+      100% {
+        transform: translate(-50%, -240px) scale(1.45);
+        opacity: 0;
+      }
+    }
+
+    .mochi-love-init {
+      width: 20%;
+    }
+
+    .acc-hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body class="pb-16">
+
+  <!-- Canvas Kembang Api Perayaan -->
+  <canvas id="fireworks-canvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+  <!-- Partikel Latar Belakang -->
+  <div id="ambient-particles"></div>
+
+  <!-- Container Utama -->
+  <main class="relative z-10 max-w-xl mx-auto px-4 pt-6 space-y-6">
+
+    <!-- Header -->
+    <header class="text-center space-y-2">
+      <div class="inline-flex flex-wrap items-center justify-center gap-2 bg-white/85 px-4 py-1.5 rounded-full shadow-sm border border-pink-100 text-xs font-bold text-pink-600">
+        <span>🌸 Taman Spesial</span>
+        <span>•</span>
+        <button id="sound-toggle-btn" onclick="toggleSound()" class="underline hover:text-pink-800">🔊 Efek: On</button>
+        <span>•</span>
+        <button id="music-toggle-btn" onclick="toggleMusicBox()" class="underline hover:text-pink-800">🎵 Musik: Off</button>
+      </div>
+      <h1 id="main-heading" class="text-3xl sm:text-4xl font-bold text-pink-600 drop-shadow-sm">
+        Halo Sayang! 💖
+      </h1>
+      <p class="text-sm sm:text-base font-semibold text-purple-900/80 max-w-md mx-auto">
+        Aku buatin taman bunga virtual, kucing lucu, & permainan gemes biar hari kamu makin ceria!
+      </p>
+    </header>
+
+    <!-- ===================================================================
+         1. TAMAN BUNGA INTERAKTIF (UPGRADED)
+    ==================================================================== -->
+    <section class="kawaii-card p-5 space-y-4">
+      <div class="flex items-center justify-between gap-2">
+        <div>
+          <h2 class="text-xl font-bold text-pink-600">🌷 Taman Bunga Cinta</h2>
+          <p class="text-xs text-purple-900/70 font-semibold">Ketuk rumput untuk menanam bunga atau siram biar jadi raksasa!</p>
+        </div>
+        <button id="sky-toggle-btn" onclick="cycleGardenSky()" class="btn-pill bg-sky-100 hover:bg-sky-200 text-sky-800 text-xs font-bold px-3 py-2 rounded-full shrink-0">
+          ☀️ Pagi Cerah
+        </button>
+      </div>
+
+      <!-- Palet Bibit & Alat Siram -->
+      <div class="flex flex-wrap gap-1.5 justify-center">
+        <button data-tool="random" onclick="selectGardenTool('random')" class="garden-tool-btn tool-active btn-pill bg-pink-100 text-pink-700 text-xs font-bold px-3 py-1.5 rounded-full">🎲 Acak</button>
+        <button data-tool="tulip" onclick="selectGardenTool('tulip')" class="garden-tool-btn btn-pill bg-pink-100 text-pink-700 text-xs font-bold px-3 py-1.5 rounded-full">🌷 Tulip</button>
+        <button data-tool="sunflower" onclick="selectGardenTool('sunflower')" class="garden-tool-btn btn-pill bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1.5 rounded-full">🌻 Matahari</button>
+        <button data-tool="sakura" onclick="selectGardenTool('sakura')" class="garden-tool-btn btn-pill bg-rose-100 text-rose-700 text-xs font-bold px-3 py-1.5 rounded-full">🌸 Sakura</button>
+        <button data-tool="rose" onclick="selectGardenTool('rose')" class="garden-tool-btn btn-pill bg-red-100 text-red-700 text-xs font-bold px-3 py-1.5 rounded-full">🌹 Mawar</button>
+        <button data-tool="lavender" onclick="selectGardenTool('lavender')" class="garden-tool-btn btn-pill bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1.5 rounded-full">🪻 Lavender</button>
+        <button data-tool="daisy" onclick="selectGardenTool('daisy')" class="garden-tool-btn btn-pill bg-yellow-100 text-yellow-800 text-xs font-bold px-3 py-1.5 rounded-full">🌼 Daisy</button>
+        <button data-tool="rainbow" onclick="selectGardenTool('rainbow')" class="garden-tool-btn btn-pill bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1.5 rounded-full">🌈 Pelangi</button>
+        <button data-tool="water" onclick="selectGardenTool('water')" class="garden-tool-btn btn-pill bg-cyan-100 text-cyan-800 text-xs font-bold px-3 py-1.5 rounded-full">🚿 Siram Bunga</button>
+      </div>
+
+      <!-- Area Taman Bunga -->
+      <div id="garden-canvas" class="sky-morning" onclick="handleGardenTap(event)">
+        <!-- Lencana Penghitung Bunga -->
+        <div class="absolute top-3 left-3 z-20 bg-white/90 px-3 py-1 rounded-full text-xs font-bold text-pink-600 shadow-xs">
+          🌸 <span id="flower-count">0</span> Bunga Mekar
+        </div>
+
+        <!-- Matahari / Bulan -->
+        <div id="garden-celestial" class="absolute top-3 right-4 text-3xl transition-transform duration-500">☀️</div>
+
+        <!-- Pelangi Melengkung -->
+        <div id="garden-rainbow"></div>
+
+        <!-- Kupu-kupu & Kunang-kunang -->
+        <div id="garden-critters"></div>
+
+        <!-- Gelembung Pesan Bunga -->
+        <div id="flower-speech" class="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 bg-white/95 border border-pink-200 text-pink-700 text-xs font-bold px-4 py-2 rounded-2xl shadow-md text-center max-w-[90%] transition-all">
+          Ketuk area rumput hijau untuk menanam bunga cintamu! 🌱
+        </div>
+      </div>
+
+      <!-- Tombol Aksi Taman -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <button onclick="rainbowRain()" class="btn-pill bg-sky-100 hover:bg-sky-200 text-sky-800 font-bold text-xs py-2.5 px-2 rounded-2xl">
+          🌦️ Hujan Pelangi
+        </button>
+        <button onclick="magicFertilizer()" class="btn-pill bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold text-xs py-2.5 px-2 rounded-2xl">
+          ✨ Pupuk Sihir
+        </button>
+        <button onclick="openBouquetStudio()" class="btn-pill bg-pink-500 hover:bg-pink-600 text-white font-bold text-xs py-2.5 px-2 rounded-2xl shadow">
+          💐 Rangkai Buket
+        </button>
+        <button onclick="clearGarden()" class="btn-pill bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs py-2.5 px-2 rounded-2xl">
+          🧹 Rapikan
+        </button>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         2. MASKOT KUCING LUCU (MOCHI) & METERAN KASIH SAYANG
+    ==================================================================== -->
+    <section class="kawaii-card p-5 text-center space-y-4">
+      <div>
+        <h2 class="text-xl font-bold text-pink-600">🐱 Kucing Mochi Penjaga Hati</h2>
+        <p class="text-xs text-purple-900/70 font-semibold">Elus, kasih stroberi, gelitikin, atau ganti kostumnya!</p>
+      </div>
+
+      <!-- Meteran Kasih Sayang -->
+      <div class="max-w-xs mx-auto space-y-1">
+        <div class="flex justify-between text-[11px] font-bold text-pink-600">
+          <span>💗 Meteran Kasih Sayang Mochi</span>
+          <span id="mochi-love-pct">20%</span>
+        </div>
+        <div class="w-full h-3 bg-pink-100 rounded-full overflow-hidden border border-pink-200">
+          <div id="mochi-love-bar" class="mochi-love-init h-full bg-gradient-to-r from-pink-400 to-rose-500 rounded-full transition-all duration-300"></div>
+        </div>
+      </div>
+
+      <!-- Karakter SVG Kucing Mochi -->
+      <div class="flex justify-center py-1">
+        <svg id="mochi-svg" onclick="petMochi()" class="w-40 h-40 cursor-pointer drop-shadow-md" viewBox="0 0 200 200">
+          <!-- Ekor -->
+          <path d="M145 145 Q182 135 174 105 Q168 88 156 102" fill="none" stroke="#f8ad9d" stroke-width="12" stroke-linecap="round"/>
+          <!-- Badan -->
+          <ellipse cx="100" cy="142" rx="48" ry="40" fill="#fff8f0" stroke="#f4a261" stroke-width="3"/>
+          <ellipse cx="100" cy="146" rx="30" ry="26" fill="#ffe5ec"/>
+          <!-- Telinga -->
+          <polygon points="54,75 44,32 82,56" fill="#fff8f0" stroke="#f4a261" stroke-width="3" stroke-linejoin="round"/>
+          <polygon points="57,68 51,42 74,57" fill="#ffccd5"/>
+          <polygon points="146,75 156,32 118,56" fill="#fff8f0" stroke="#f4a261" stroke-width="3" stroke-linejoin="round"/>
+          <polygon points="143,68 149,42 126,57" fill="#ffccd5"/>
+          <!-- Kepala -->
+          <ellipse cx="100" cy="88" rx="54" ry="44" fill="#fff8f0" stroke="#f4a261" stroke-width="3"/>
+          <!-- Mata & Pipi -->
+          <circle cx="78" cy="86" r="6.5" fill="#4a2545"/>
+          <circle cx="76" cy="84" r="2.2" fill="#ffffff"/>
+          <circle cx="122" cy="86" r="6.5" fill="#4a2545"/>
+          <circle cx="120" cy="84" r="2.2" fill="#ffffff"/>
+          <ellipse cx="66" cy="96" rx="8" ry="4.5" fill="#ff8fa3" opacity="0.7"/>
+          <ellipse cx="134" cy="96" rx="8" ry="4.5" fill="#ff8fa3" opacity="0.7"/>
+          <!-- Hidung & Mulut -->
+          <polygon points="96,94 104,94 100,99" fill="#ff5c8a"/>
+          <path d="M91 102 Q96 108 100 101 Q104 108 109 102" fill="none" stroke="#4a2545" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Kumis -->
+          <line x1="42" y1="86" x2="60" y2="89" stroke="#d4a373" stroke-width="2" stroke-linecap="round"/>
+          <line x1="40" y1="95" x2="59" y2="95" stroke="#d4a373" stroke-width="2" stroke-linecap="round"/>
+          <line x1="140" y1="89" x2="158" y2="86" stroke="#d4a373" stroke-width="2" stroke-linecap="round"/>
+          <line x1="141" y1="95" x2="160" y2="95" stroke="#d4a373" stroke-width="2" stroke-linecap="round"/>
+          <!-- Kaki Depan -->
+          <ellipse cx="80" cy="175" rx="13" ry="9" fill="#fff8f0" stroke="#f4a261" stroke-width="2.5"/>
+          <ellipse cx="120" cy="175" rx="13" ry="9" fill="#fff8f0" stroke="#f4a261" stroke-width="2.5"/>
+
+          <!-- AKSESORIS 1: Kacamata Kece -->
+          <g id="acc-glasses" class="acc-hidden">
+            <rect x="62" y="76" width="32" height="20" rx="6" fill="#2b2d42" stroke="#ff5c8a" stroke-width="2.5"/>
+            <rect x="106" y="76" width="32" height="20" rx="6" fill="#2b2d42" stroke="#ff5c8a" stroke-width="2.5"/>
+            <line x1="94" y1="84" x2="106" y2="84" stroke="#ff5c8a" stroke-width="3"/>
+          </g>
+
+          <!-- AKSESORIS 2: Topi Stroberi -->
+          <g id="acc-strawberry" class="acc-hidden">
+            <path d="M78 48 Q100 14 122 48 Z" fill="#ff4d6d" stroke="#c9184a" stroke-width="2"/>
+            <path d="M86 46 L100 38 L114 46" fill="none" stroke="#52b788" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="95" cy="36" r="1.5" fill="#fff3b0"/>
+            <circle cx="105" cy="38" r="1.5" fill="#fff3b0"/>
+            <circle cx="100" cy="29" r="1.5" fill="#fff3b0"/>
+          </g>
+
+          <!-- AKSESORIS 3: Mahkota Bunga -->
+          <g id="acc-crown" class="acc-hidden">
+            <circle cx="80" cy="46" r="7" fill="#ffccd5"/>
+            <circle cx="80" cy="46" r="3" fill="#ffb703"/>
+            <circle cx="100" cy="42" r="8" fill="#ffc8dd"/>
+            <circle cx="100" cy="42" r="3.5" fill="#fb8500"/>
+            <circle cx="120" cy="46" r="7" fill="#bde0fe"/>
+            <circle cx="120" cy="46" r="3" fill="#ffb703"/>
+          </g>
+        </svg>
+      </div>
+
+      <div id="mochi-speech" class="bg-pink-50 border border-pink-200 rounded-2xl px-4 py-2.5 text-xs sm:text-sm font-bold text-pink-700">
+        "Meow~ Halo cantik! Elus kepala Mochi dong 🐾💕"
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <button onclick="petMochi()" class="btn-pill bg-pink-100 hover:bg-pink-200 text-pink-700 font-bold text-xs py-2.5 rounded-2xl">👋 Elus Kepala</button>
+        <button onclick="feedMochi()" class="btn-pill bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold text-xs py-2.5 rounded-2xl">🍓 Kasih Stroberi</button>
+        <button onclick="tickleMochi()" class="btn-pill bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold text-xs py-2.5 rounded-2xl">🪶 Gelitikin</button>
+        <button onclick="cycleMochiOutfit()" class="btn-pill bg-purple-100 hover:bg-purple-200 text-purple-700 font-bold text-xs py-2.5 rounded-2xl">🎀 Ganti Kostum</button>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         3. STUDIO FOTO ANIMASI KITA
+    ==================================================================== -->
+    <section class="kawaii-card p-5 text-center space-y-4">
+      <div>
+        <h2 class="text-xl font-bold text-pink-600">🎨 Studio Foto Animasi Kita</h2>
+        <p class="text-xs text-purple-900/70 font-semibold">Ubah foto kalian jadi gaya Anime / Kartun Pastel + stiker gemes!</p>
+      </div>
+
+      <div class="flex justify-center">
+        <canvas id="anime-photo-canvas" width="280" height="280" class="rounded-3xl border-4 border-white shadow-lg bg-pink-50 max-w-full"></canvas>
+      </div>
+
+      <!-- Pilih Gaya Filter -->
+      <div class="flex flex-wrap justify-center gap-2">
+        <button data-filter="anime" onclick="setAnimeFilter('anime')" class="filter-btn tool-active btn-pill bg-pink-100 text-pink-700 text-xs font-bold px-3.5 py-1.5 rounded-full">✨ Anime Cel</button>
+        <button data-filter="pastel" onclick="setAnimeFilter('pastel')" class="filter-btn btn-pill bg-purple-100 text-purple-700 text-xs font-bold px-3.5 py-1.5 rounded-full">🍭 Kartun Pastel</button>
+        <button data-filter="ghibli" onclick="setAnimeFilter('ghibli')" class="filter-btn btn-pill bg-emerald-100 text-emerald-700 text-xs font-bold px-3.5 py-1.5 rounded-full">🌿 Ghibli Dreamy</button>
+      </div>
+
+      <!-- Pilih Stiker -->
+      <div class="flex flex-wrap justify-center gap-2">
+        <button data-sticker="ears" onclick="togglePhotoSticker('ears')" class="sticker-btn btn-pill bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1.5 rounded-full">🐱 Telinga Kucing</button>
+        <button data-sticker="crown" onclick="togglePhotoSticker('crown')" class="sticker-btn btn-pill bg-rose-100 text-rose-700 text-xs font-bold px-3 py-1.5 rounded-full">👑 Mahkota Bunga</button>
+        <button data-sticker="sparkles" onclick="togglePhotoSticker('sparkles')" class="sticker-btn tool-active btn-pill bg-sky-100 text-sky-800 text-xs font-bold px-3 py-1.5 rounded-full">💖 Kilau Cinta</button>
+      </div>
+
+      <!-- Upload & Simpan -->
+      <div class="flex gap-2 justify-center">
+        <label class="btn-pill flex-1 bg-pink-500 hover:bg-pink-600 text-white font-bold text-xs sm:text-sm py-3 px-4 rounded-2xl shadow cursor-pointer text-center">
+          📸 Upload Foto
+          <input id="photo-upload-input" type="file" accept="image/*" onchange="handlePhotoUpload(event)" class="hidden" />
+        </label>
+        <button onclick="downloadAnimePhoto()" class="btn-pill flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs sm:text-sm py-3 px-4 rounded-2xl shadow">
+          💾 Simpan Foto
+        </button>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         4A. ALAT PENDETEKSI TINGKAT GEMES & MOOD
+    ==================================================================== -->
+    <section class="kawaii-card p-5 text-center space-y-3">
+      <h2 class="text-xl font-bold text-pink-600">🔮 Scanner Tingkat Gemes</h2>
+      <p class="text-xs text-purple-900/70 font-semibold">Tempelkan jempol kamu di tombol bawah untuk cek kadar keimutan:</p>
+      <button onclick="runCutenessScanner()" class="btn-pill mx-auto w-20 h-20 rounded-full bg-gradient-to-tr from-pink-500 to-purple-500 text-white text-3xl flex items-center justify-center shadow-lg border-4 border-white">
+        👆
+      </button>
+      <div id="scanner-result" class="bg-purple-50 border border-purple-200 rounded-2xl p-3 text-xs sm:text-sm font-bold text-purple-800">
+        Status: Menunggu sidik jari orang paling cantik... ✨
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         4B. AMPLOP "BUKA SAAT..."
+    ==================================================================== -->
+    <section class="kawaii-card p-5 space-y-3">
+      <div class="text-center">
+        <h2 class="text-xl font-bold text-pink-600">✉️ Amplop "Buka Saat..."</h2>
+        <p class="text-xs text-purple-900/70 font-semibold">Ketuk salah satu amplop sesuai perasaan kamu hari ini:</p>
+      </div>
+      <div id="open-when-grid" class="grid grid-cols-2 gap-2"></div>
+    </section>
+
+    <!-- ===================================================================
+         4C. BISKUIT KEBERUNTUNGAN CINTA (FORTUNE COOKIE)
+    ==================================================================== -->
+    <section class="kawaii-card p-5 text-center space-y-4">
+      <div>
+        <h2 class="text-xl font-bold text-pink-600">🥠 Biskuit Keberuntungan Cinta</h2>
+        <p class="text-xs text-purple-900/70 font-semibold">Ketuk biskuitnya untuk baca ramalan manis & misi gemes hari ini!</p>
+      </div>
+
+      <button id="fortune-cookie-btn" onclick="crackFortuneCookie()" class="btn-pill mx-auto flex items-center justify-center gap-1 py-2 px-6 rounded-3xl bg-amber-50 border-2 border-amber-200 shadow-sm">
+        <span class="cookie-shell cookie-left text-5xl">🥠</span>
+        <span class="cookie-shell cookie-right text-4xl">✨</span>
+      </button>
+
+      <div id="fortune-paper" class="bg-gradient-to-r from-amber-50 via-pink-50 to-amber-50 border-2 border-dashed border-pink-300 rounded-2xl p-4 space-y-1.5">
+        <p id="fortune-message" class="text-xs sm:text-sm font-bold text-pink-700">
+          "Ketuk biskuit di atas untuk membuka pesan rahasia di dalamnya! 💌"
+        </p>
+        <p id="fortune-mission" class="text-[11px] font-semibold text-amber-800">
+          Misi Hari Ini: Tersenyum manis minimal 5 detik ✨
+        </p>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         4D. POP-IT PENGHILANG STRES (BUBBLE WRAP GEMES)
+    ==================================================================== -->
+    <section class="kawaii-card p-5 text-center space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="text-left">
+          <h2 class="text-xl font-bold text-pink-600">🫧 Pop-It Anti-Bete</h2>
+          <p class="text-xs text-purple-900/70 font-semibold">Pencet semua gelembungnya biar pikiran rileks!</p>
+        </div>
+        <span class="bg-pink-100 text-pink-700 text-xs font-bold px-3 py-1.5 rounded-full">
+          Pop: <span id="popit-counter">0</span>
+        </span>
+      </div>
+
+      <div id="popit-grid" class="grid grid-cols-6 gap-2.5 p-3 bg-pink-50/90 rounded-2xl border-2 border-pink-100"></div>
+
+      <button onclick="resetPopItGrid()" class="btn-pill bg-pink-100 hover:bg-pink-200 text-pink-700 font-bold text-xs px-5 py-2 rounded-full">
+        🔄 Gelembungkan Lagi
+      </button>
+    </section>
+
+    <!-- ===================================================================
+         4E. POJOK KIRIM PELUK & PUK-PUK VIRTUAL
+    ==================================================================== -->
+    <section class="kawaii-card p-5 text-center space-y-4">
+      <div>
+        <h2 class="text-xl font-bold text-pink-600">🤗 Pojok Peluk & Puk-Puk Virtual</h2>
+        <p class="text-xs text-purple-900/70 font-semibold">Kumpulkan peluk & puk-puk virtual lalu kirim langsung ke chat aku!</p>
+      </div>
+
+      <div class="grid grid-cols-4 gap-2">
+        <button onclick="sendVirtualAffection('🤗', 'Peluk Hangat')" class="btn-pill bg-pink-100 hover:bg-pink-200 text-pink-700 font-bold text-xs py-3 px-1 rounded-2xl flex flex-col items-center gap-1">
+          <span class="text-2xl">🤗</span>
+          <span>Peluk</span>
+        </button>
+        <button onclick="sendVirtualAffection('🫳', 'Puk-Puk Kepala')" class="btn-pill bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold text-xs py-3 px-1 rounded-2xl flex flex-col items-center gap-1">
+          <span class="text-2xl">🫳</span>
+          <span>Puk-Puk</span>
+        </button>
+        <button onclick="sendVirtualAffection('😘', 'Cium Jauh')" class="btn-pill bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold text-xs py-3 px-1 rounded-2xl flex flex-col items-center gap-1">
+          <span class="text-2xl">😘</span>
+          <span>Muach</span>
+        </button>
+        <button onclick="sendVirtualAffection('🍫', 'Cokelat Manis')" class="btn-pill bg-purple-100 hover:bg-purple-200 text-purple-700 font-bold text-xs py-3 px-1 rounded-2xl flex flex-col items-center gap-1">
+          <span class="text-2xl">🍫</span>
+          <span>Cokelat</span>
+        </button>
+      </div>
+
+      <div class="flex items-center justify-between bg-pink-50 border border-pink-200 rounded-2xl px-4 py-2.5">
+        <span class="text-xs font-bold text-pink-700">
+          💖 Terkumpul: <span id="affection-total">0</span> Kasih Sayang
+        </span>
+        <button onclick="claimAffectionToWA()" class="btn-pill bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs px-3.5 py-1.5 rounded-full shadow">
+          📲 Kirim ke WA
+        </button>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         4F. SERTIFIKAT PACAR PALING MENGGEMASKAN
+    ==================================================================== -->
+    <section class="kawaii-card p-5 text-center space-y-4">
+      <div>
+        <h2 class="text-xl font-bold text-pink-600">🏆 Sertifikat Resmi Untukmu</h2>
+        <p class="text-xs text-purple-900/70 font-semibold">Penghargaan sah atas keimutan & kebaikan hatimu:</p>
+      </div>
+
+      <canvas id="certificate-canvas" width="480" height="320" class="w-full rounded-2xl shadow-md border-2 border-pink-200 bg-white"></canvas>
+
+      <button onclick="downloadCertificate()" class="btn-pill w-full bg-gradient-to-r from-pink-500 to-amber-500 text-white font-bold text-xs sm:text-sm py-3 px-4 rounded-2xl shadow-md">
+        💾 Simpan Sertifikat Cantik Ini
+      </button>
+    </section>
+
+    <!-- ===================================================================
+         4G. RODA KEBERUNTUNGAN "JAJAN & DATE KITA"
+    ==================================================================== -->
+    <section class="kawaii-card p-5 text-center space-y-4">
+      <div>
+        <h2 class="text-xl font-bold text-pink-600">🎡 Roda Anti-"Terserah"</h2>
+        <p class="text-xs text-purple-900/70 font-semibold">Bingung mau jajan atau ngapain? Putar rodanya dan klaim hadiahnya!</p>
+      </div>
+
+      <div class="relative w-60 h-60 mx-auto flex items-center justify-center">
+        <div class="absolute -top-2 left-1/2 -translate-x-1/2 z-20 text-2xl drop-shadow">🔻</div>
+        <canvas id="wheel-canvas" width="240" height="240" class="rounded-full shadow-lg border-4 border-white"></canvas>
+      </div>
+
+      <div id="wheel-result-box" class="bg-amber-50 border border-amber-200 rounded-2xl px-4 py-2.5 text-xs sm:text-sm font-bold text-amber-900">
+        Klik tombol "Putar Roda" untuk dapet traktiran/date spesial! ✨
+      </div>
+
+      <div class="flex gap-2 justify-center">
+        <button id="spin-wheel-btn" onclick="spinDateWheel()" class="btn-pill flex-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold text-xs sm:text-sm py-3 px-4 rounded-2xl shadow-md">
+          🎰 Putar Roda Keberuntungan
+        </button>
+        <button id="claim-wheel-btn" onclick="sendWheelResultToWA()" class="hidden btn-pill bg-emerald-500 text-white font-bold text-xs px-4 py-3 rounded-2xl shadow-md">
+          📲 Klaim WA
+        </button>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         4H. MINI-GAME ARCADE: MOCHI TANGKAP HATI & STROBERI
+    ==================================================================== -->
+    <section class="kawaii-card p-5 text-center space-y-3">
+      <div class="flex items-center justify-between">
+        <div class="text-left">
+          <h2 class="text-xl font-bold text-pink-600">🎮 Mochi Tangkap Cinta</h2>
+          <p class="text-xs text-purple-900/70 font-semibold">Capai 100 poin buat buka surat rahasia!</p>
+        </div>
+        <div class="bg-pink-100 text-pink-700 font-bold text-xs px-3 py-1.5 rounded-full">
+          Skor: <span id="game-score">0</span> / 100
+        </div>
+      </div>
+
+      <div class="relative rounded-2xl overflow-hidden border-2 border-pink-200 bg-gradient-to-b from-sky-100 to-pink-50">
+        <canvas id="catch-game-canvas" width="360" height="240" class="w-full block touch-none"></canvas>
+        <div id="game-overlay-msg" class="absolute inset-0 bg-white/85 flex flex-col items-center justify-center p-4 space-y-3">
+          <p class="text-xs sm:text-sm font-bold text-pink-700">
+            Tangkap 🍓 (+15), 🌸 (+10), 💖 (+20) & hindari ⛈️ (-15)!
+          </p>
+          <button onclick="startCatchGame()" class="btn-pill bg-pink-500 hover:bg-pink-600 text-white font-bold text-xs sm:text-sm px-6 py-2.5 rounded-full shadow-md">
+            ▶️ Mulai Main
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3 pt-1">
+        <button onpointerdown="moveGameMochi(-28)" class="btn-pill bg-pink-100 active:bg-pink-200 text-pink-700 font-bold text-sm py-2.5 rounded-2xl">
+          ⬅️ Geser Kiri
+        </button>
+        <button onpointerdown="moveGameMochi(28)" class="btn-pill bg-pink-100 active:bg-pink-200 text-pink-700 font-bold text-sm py-2.5 rounded-2xl">
+          Geser Kanan ➡️
+        </button>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         5. PERTANYAAN LUCU (TOMBOL KABUR) & TOMBOL DARURAT NGAMBEK
+    ==================================================================== -->
+    <section class="kawaii-card p-5 text-center space-y-4">
+      <h2 class="text-xl font-bold text-pink-600">💌 Pertanyaan Penting Nih!</h2>
+      <p class="text-sm font-bold text-purple-950">Kamu sayang aku nggak hari ini? 🥺👉👈</p>
+
+      <div id="dodge-playground" class="relative h-24 bg-pink-50/70 rounded-2xl border border-pink-100 flex items-center justify-center gap-4 overflow-hidden">
+        <button onclick="answerYes()" class="btn-pill bg-pink-500 hover:bg-pink-600 text-white font-bold text-sm px-5 py-2.5 rounded-full shadow-md z-10">
+          Sayang Banget! 💖
+        </button>
+        <button id="runaway-btn" onmouseover="moveRunawayBtn()" ontouchstart="moveRunawayBtn()" onclick="moveRunawayBtn()" class="bg-gray-200 text-gray-600 font-bold text-xs px-4 py-2 rounded-full transition-all duration-150">
+          Nggak ah 😜
+        </button>
+      </div>
+
+      <p id="love-answer-feedback" class="text-xs font-bold text-pink-600 hidden"></p>
+
+      <hr class="border-pink-100" />
+
+      <div class="pt-1">
+        <button onclick="triggerEmergencyNgambek()" class="btn-pill w-full bg-gradient-to-r from-red-500 to-pink-500 text-white font-bold text-sm py-3 px-4 rounded-2xl shadow-md">
+          🚨 Tombol Darurat Kalau Lagi Ngambek / Bad Mood
+        </button>
+      </div>
+    </section>
+
+    <footer class="text-center text-xs font-semibold text-purple-900/60 pt-2">
+      Dibuat sepenuh hati khusus buat bikin kamu tersenyum 🌸✨
+    </footer>
+  </main>
+
+  <!-- =====================================================================
+       MODAL STUDIO RANGKAI BUKET BUNGA
+  ====================================================================== -->
+  <div id="bouquet-modal" class="fixed inset-0 bg-purple-950/60 z-50 hidden items-center justify-center p-4" onclick="closeBouquetStudio()">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl" onclick="event.stopPropagation()">
+      <h3 class="text-xl font-bold text-pink-600">💐 Buket Bunga Spesialmu</h3>
+      <p class="text-xs text-gray-600 font-semibold">Dirangkai otomatis dari bunga-bunga di tamanmu!</p>
+      <canvas id="bouquet-canvas" width="320" height="320" class="w-full max-w-[260px] mx-auto rounded-2xl border-2 border-pink-100 shadow-inner bg-pink-50/40"></canvas>
+      <div class="flex gap-2">
+        <button onclick="downloadBouquet()" class="btn-pill flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs py-3 rounded-2xl shadow">
+          💾 Simpan Buket
+        </button>
+        <button onclick="closeBouquetStudio()" class="btn-pill flex-1 bg-pink-100 text-pink-700 font-bold text-xs py-3 rounded-2xl">
+          Tutup 💕
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL SURAT "BUKA SAAT..." & HADIAH GAME
+  ====================================================================== -->
+  <div id="letter-modal" class="fixed inset-0 bg-purple-950/60 z-50 hidden items-center justify-center p-4" onclick="closeLetterModal()">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl" onclick="event.stopPropagation()">
+      <div id="letter-modal-icon" class="text-5xl">💌</div>
+      <h3 id="letter-modal-title" class="text-xl font-bold text-pink-600">Judul Surat</h3>
+      <p id="letter-modal-body" class="text-sm text-gray-700 leading-relaxed font-medium">
+        Isi surat manis untukmu.
+      </p>
+      <button onclick="closeLetterModal()" class="btn-pill w-full bg-pink-500 text-white font-bold text-sm py-3 rounded-2xl shadow">
+        Peluk & Tutup Surat 💖
+      </button>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       MODAL DARURAT NGAMBEK
+  ====================================================================== -->
+  <div id="ngambek-modal" class="fixed inset-0 bg-purple-950/60 z-50 hidden items-center justify-center p-4" onclick="closeNgambekModal()">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl" onclick="event.stopPropagation()">
+      <div class="text-5xl">🥺💐🍫</div>
+      <h3 class="text-xl font-bold text-pink-600">Jangan Ngambek Dong Cantik...</h3>
+      <p class="text-sm text-gray-700 leading-relaxed font-medium">
+        Maafin aku ya kalau ada salah atau bikin kamu bete. Sebagai gantinya, kamu berhak klaim <b>1x Jajan Bebas / Es Krim / Boba</b> sekarang juga!
+      </p>
+      <div class="space-y-2">
+        <button onclick="sendNgambekToWhatsApp()" class="btn-pill w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm py-3 rounded-2xl shadow">
+          📲 Klaim Jajan ke WhatsApp Aku
+        </button>
+        <button onclick="closeNgambekModal()" class="btn-pill w-full bg-pink-100 text-pink-700 font-bold text-xs py-2.5 rounded-2xl">
+          Oke, Dimaafin Deh 💕
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // KONFIGURASI DATA (UBAH NAMA, FOTO DEFAULT & WHATSAPP DI SINI)
+    // =========================================================================
+    const CONFIG = {
+      namaPacar: "Anin", // Ganti dengan nama panggilan pacarmu
+      fotoUtama: "foto-kita.jpg", // Taruh foto kalian di folder yang sama dengan nama ini
+      nomorWhatsApp: "6281278550573", // Format 628xxx tanpa tanda + atau 0
+      pesanBunga: [
+        "Bunga ini mekar khusus buat ngingetin kalau kamu manis banget! 🌸",
+        "Kamu lebih cantik dari semua bunga di taman ini tau! 💖",
+        "Semoga hari kamu secerah bunga matahari ini ya sayang 🌻",
+        "Makasih sudah bikin hariku selalu berbunga-bunga 🌷",
+        "Setiap kelopak bunga ini bawa peluk hangat buat kamu 🤗💕",
+        "Jangan lupa senyum hari ini ya cantik! ✨"
+      ],
+      ucapanMochi: [
+        "Purrrr~ Enak banget dielus sama orang cantik 😻💕",
+        "Meow! Tuanku bilang kamu itu kesayangannya nomor satu! 🐾",
+        "Mochi seneng banget kalau kamu lagi senyum kayak gini 🌸",
+        "Elus lagi dong, Mochi jadi ngantuk manja nih~ 😸✨"
+      ],
+      amplopSurat: [
+        {
+          icon: "🥺",
+          label: "Buka saat kangen",
+          judul: "Kalau Kamu Lagi Kangen...",
+          isi: "Hai sayang, kalau kamu lagi kangen, ingat ya di sini ada aku yang selalu mikirin kamu. Sabar sebentar, nanti kita ketemu dan habiskan waktu bareng lagi. Peluk jauh dari sini! 🤗💖"
+        },
+        {
+          icon: "😫",
+          label: "Buka saat capek",
+          judul: "Istirahat Sebentar Ya Cantik",
+          isi: "Hari ini pasti melelahkan ya? Kamu sudah hebat banget hari ini dan aku bangga sama kamu. Jangan lupa minum air putih, tarik napas, dan istirahat yang cukup ya! 🌸✨"
+        },
+        {
+          icon: "😤",
+          label: "Buka saat bad mood",
+          judul: "Jangan Cemberut Terus Dong",
+          isi: "Siapa yang bikin kesayanganku bete hari ini? Sini cerita ke aku, atau kita jajan makanan favorit kamu biar mood-nya balik lagi. Senyum dong, cantiknya ilang lho nanti! 😊💕"
+        },
+        {
+          icon: "🌟",
+          label: "Butuh semangat",
+          judul: "Kamu Pasti Bisa!",
+          isi: "Apapun yang lagi kamu kerjain atau hadapi sekarang, aku percaya 100% kamu pasti bisa melewatinya. Aku bakal selalu jadi supporter nomor satu kamu! Semangat sayang! 🚀💖"
+        }
+      ],
+      ramalanBiskuit: [
+        {
+          pesan: "Hari ini aura cantikmu naik 200%! Siap-siap dapet kabar baik dan senyum terus 🌸",
+          misi: "Misi Hari Ini: Kirim foto selfie senyum kamu ke WA aku!"
+        },
+        {
+          pesan: "Bintang keberuntunganmu bilang kamu lagi butuh asupan manis (boba/es krim) 🧋🍦",
+          misi: "Misi Hari Ini: Tagih traktiran minuman manis ke aku!"
+        },
+        {
+          pesan: "Ada seseorang yang lagi kangen banget sama suara & tawa kamu detik ini juga 💖",
+          misi: "Misi Hari Ini: Chat 'Aku kangen' dan lihat reaksiku!"
+        },
+        {
+          pesan: "Semua urusanmu hari ini bakal dilancarkan karena kamu anak baik & penyayang ✨",
+          misi: "Misi Hari Ini: Jangan lupa minum air putih & jaga kesehatan!"
+        }
+      ],
+      hadiahRoda: [
+        "🧋 Traktir Boba / Kopi",
+        "🍔 Makan Enak Bebas",
+        "🎬 Nonton Film Bareng",
+        "🍦 Es Krim 2 Scoop",
+        "🤗 Peluk 1 Menit Full",
+        "🛍️ Jajan Cemilan Sore"
+      ]
+    };
+
+    // =========================================================================
+    // EFEK SUARA & KOTAK MUSIK MELODI (WEB AUDIO API)
+    // =========================================================================
+    let soundEnabled = true;
+    let audioCtx = null;
+    let musicBoxPlaying = false;
+    let musicBoxTimer = null;
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      const btn = document.getElementById('sound-toggle-btn');
+      if (btn) {
+        btn.innerText = soundEnabled ? '🔊 Efek: On' : '🔇 Efek: Off';
+      }
+    }
+
+    function toggleMusicBox() {
+      musicBoxPlaying = !musicBoxPlaying;
+      const btn = document.getElementById('music-toggle-btn');
+      if (btn) {
+        btn.innerText = musicBoxPlaying ? '🎵 Musik: On' : '🎵 Musik: Off';
+      }
+      if (musicBoxPlaying) {
+        startMusicBoxLoop();
+      } else if (musicBoxTimer) {
+        clearInterval(musicBoxTimer);
+        musicBoxTimer = null;
+      }
+    }
+
+    function startMusicBoxLoop() {
+      if (musicBoxTimer) clearInterval(musicBoxTimer);
+      const notes = [523.25, 659.25, 783.99, 659.25, 587.33, 698.46, 880.00, 698.46, 523.25, 659.25, 783.99, 1046.50, 987.77, 783.99, 659.25, 587.33];
+      let step = 0;
+      musicBoxTimer = setInterval(() => {
+        if (!musicBoxPlaying) return;
+        playChime(notes[step % notes.length], 'sine', 0.45);
+        step++;
+      }, 480);
+    }
+
+    function playChime(freq = 523.25, type = 'sine', duration = 0.2) {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        // Abaikan jika browser membatasi autoplay audio
+      }
+    }
+
+    // =========================================================================
+    // PARTIKEL LATAR & PERCIKAN SENTUH LAYAR
+    // =========================================================================
+    function initAmbientParticles() {
+      const container = document.getElementById('ambient-particles');
+      if (!container) return;
+      const items = ['🌸', '💖', '✨', '🌷', '🐾'];
+      setInterval(() => {
+        const el = document.createElement('div');
+        el.className = 'ambient-item';
+        el.innerText = items[Math.floor(Math.random() * items.length)];
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.fontSize = (Math.random() * 12 + 12) + 'px';
+        const dur = Math.random() * 6 + 7;
+        el.style.animationDuration = dur + 's';
+        container.appendChild(el);
+        setTimeout(() => el.remove(), dur * 1000);
+      }, 1100);
+    }
+
+    document.addEventListener('pointerdown', (e) => {
+      const sparks = ['💖', '🌸', '✨', '💕'];
+      const spark = document.createElement('div');
+      spark.className = 'tap-spark';
+      spark.innerText = sparks[Math.floor(Math.random() * sparks.length)];
+      spark.style.left = e.clientX + 'px';
+      spark.style.top = e.clientY + 'px';
+      document.body.appendChild(spark);
+      setTimeout(() => spark.remove(), 850);
+    });
+
+    // =========================================================================
+    // 1. LOGIKA TAMAN BUNGA INTERAKTIF
+    // =========================================================================
+    let selectedGardenTool = 'random';
+    let gardenFlowers = [];
+    const skyModes = ['morning', 'sunset', 'night'];
+    let currentSkyIdx = 0;
+
+    const flowerVarieties = {
+      tulip: { name: 'Tulip Belanda', color: '#ff4d6d', accent: '#ff8fa3' },
+      sunflower: { name: 'Bunga Matahari', color: '#ffb703', accent: '#6f4518' },
+      sakura: { name: 'Sakura Mekar', color: '#ffccd5', accent: '#ff758f' },
+      rose: { name: 'Mawar Beludru', color: '#d90429', accent: '#ef233c' },
+      lavender: { name: 'Lavender Ungu', color: '#9d4edd', accent: '#c77dff' },
+      daisy: { name: 'Daisy Ceria', color: '#ffffff', accent: '#ffb703' },
+      rainbow: { name: 'Bunga Pelangi Cinta', color: '#ff5c8a', accent: '#00bbf9' }
+    };
+
+    function selectGardenTool(tool) {
+      selectedGardenTool = tool;
+      document.querySelectorAll('.garden-tool-btn').forEach(btn => {
+        if (btn.dataset.tool === tool) {
+          btn.classList.add('tool-active');
+        } else {
+          btn.classList.remove('tool-active');
+        }
+      });
+      playChime(659.25, 'sine', 0.12);
+    }
+
+    function cycleGardenSky() {
+      currentSkyIdx = (currentSkyIdx + 1) % skyModes.length;
+      const mode = skyModes[currentSkyIdx];
+      const canvas = document.getElementById('garden-canvas');
+      const btn = document.getElementById('sky-toggle-btn');
+      const celestial = document.getElementById('garden-celestial');
+
+      if (canvas) {
+        canvas.classList.remove('sky-morning', 'sky-sunset', 'sky-night');
+        canvas.classList.add(`sky-${mode}`);
+      }
+      if (btn && celestial) {
+        if (mode === 'morning') {
+          btn.innerText = '☀️ Pagi Cerah';
+          celestial.innerText = '☀️';
+        } else if (mode === 'sunset') {
+          btn.innerText = '🌇 Senja Manis';
+          celestial.innerText = '🌅';
+        } else {
+          btn.innerText = '🌙 Malam Kunang';
+          celestial.innerText = '🌙';
+        }
+      }
+      renderGardenCritters();
+      playChime(783.99, 'sine', 0.2);
+    }
+
+    function renderGardenCritters() {
+      const container = document.getElementById('garden-critters');
+      if (!container) return;
+      container.innerHTML = '';
+      const isNight = skyModes[currentSkyIdx] === 'night';
+      const critterEmoji = isNight ? '✨' : '🦋';
+      for (let i = 0; i < 4; i++) {
+        const el = document.createElement('div');
+        el.className = 'garden-critter text-lg';
+        el.innerText = i === 3 && !isNight ? '🐝' : critterEmoji;
+        el.style.left = (15 + i * 22) + '%';
+        el.style.top = (25 + (i % 2) * 20) + '%';
+        el.style.animationDelay = (i * 1.4) + 's';
+        container.appendChild(el);
+      }
+    }
+
+    function createFlowerSVG(type, level = 1) {
+      const scale = 0.85 + (level - 1) * 0.28;
+      const v = flowerVarieties[type] || flowerVarieties.tulip;
+      let headSVG = '';
+
+      if (type === 'tulip') {
+        headSVG = `
+          <path d="M18 32 C12 16 20 8 25 18 C30 8 38 16 32 32 Z" fill="${v.color}"/>
+          <path d="M21 32 C19 18 25 12 25 18 C25 12 31 18 29 32 Z" fill="${v.accent}"/>
+        `;
+      } else if (type === 'sunflower') {
+        headSVG = `
+          <circle cx="25" cy="20" r="13" fill="#ffb703" stroke="#fb8500" stroke-width="2" stroke-dasharray="4 2"/>
+          <circle cx="25" cy="20" r="7" fill="#582f0e"/>
+        `;
+      } else if (type === 'sakura') {
+        headSVG = `
+          <circle cx="25" cy="12" r="6" fill="#ffccd5"/>
+          <circle cx="33" cy="18" r="6" fill="#ffb3c1"/>
+          <circle cx="30" cy="27" r="6" fill="#ffccd5"/>
+          <circle cx="20" cy="27" r="6" fill="#ffb3c1"/>
+          <circle cx="17" cy="18" r="6" fill="#ffccd5"/>
+          <circle cx="25" cy="20" r="3.5" fill="#ff4d6d"/>
+        `;
+      } else if (type === 'rose') {
+        headSVG = `
+          <circle cx="25" cy="20" r="11" fill="#d90429"/>
+          <path d="M19 20 A6 6 0 1 1 31 20 A4 4 0 1 1 21 20" fill="none" stroke="#ff8fa3" stroke-width="2"/>
+        `;
+      } else if (type === 'lavender') {
+        headSVG = `
+          <ellipse cx="25" cy="10" rx="4" ry="4" fill="#c77dff"/>
+          <ellipse cx="21" cy="16" rx="4.5" ry="3.5" fill="#9d4edd"/>
+          <ellipse cx="29" cy="16" rx="4.5" ry="3.5" fill="#9d4edd"/>
+          <ellipse cx="21" cy="23" rx="5" ry="3.5" fill="#7b2cbf"/>
+          <ellipse cx="29" cy="23" rx="5" ry="3.5" fill="#7b2cbf"/>
+        `;
+      } else if (type === 'rainbow') {
+        headSVG = `
+          <circle cx="25" cy="12" r="6" fill="#ff5c8a"/>
+          <circle cx="33" cy="18" r="6" fill="#fee440"/>
+          <circle cx="30" cy="27" r="6" fill="#00f5d4"/>
+          <circle cx="20" cy="27" r="6" fill="#00bbf9"/>
+          <circle cx="17" cy="18" r="6" fill="#9b5de5"/>
+          <circle cx="25" cy="20" r="4" fill="#ffffff"/>
+        `;
+      } else {
+        headSVG = `
+          <circle cx="25" cy="12" r="5.5" fill="#ffffff"/>
+          <circle cx="33" cy="18" r="5.5" fill="#ffffff"/>
+          <circle cx="30" cy="27" r="5.5" fill="#ffffff"/>
+          <circle cx="20" cy="27" r="5.5" fill="#ffffff"/>
+          <circle cx="17" cy="18" r="5.5" fill="#ffffff"/>
+          <circle cx="25" cy="20" r="4.5" fill="#ffb703"/>
+        `;
+      }
+
+      return `
+        <svg width="${50 * scale}" height="${68 * scale}" viewBox="0 0 50 68">
+          <path d="M25 66 Q24 44 25 26" stroke="#2d6a4f" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <ellipse cx="18" cy="48" rx="7" ry="3.5" transform="rotate(-25 18 48)" fill="#40916c"/>
+          <ellipse cx="32" cy="43" rx="7" ry="3.5" transform="rotate(25 32 43)" fill="#52b788"/>
+          ${headSVG}
+        </svg>
+      `;
+    }
+
+    function updateFlowerCounter() {
+      const countEl = document.getElementById('flower-count');
+      if (countEl) {
+        countEl.innerText = gardenFlowers.length;
+      }
+    }
+
+    function spawnFloatingFx(xPercent, yPercent, symbol) {
+      const canvas = document.getElementById('garden-canvas');
+      if (!canvas) return;
+      const fx = document.createElement('div');
+      fx.className = 'floating-fx';
+      fx.innerText = symbol;
+      fx.style.left = xPercent + '%';
+      fx.style.top = yPercent + '%';
+      canvas.appendChild(fx);
+      setTimeout(() => fx.remove(), 900);
+    }
+
+    function plantFlowerAt(xPercent, yPercent, forcedType = null) {
+      const canvas = document.getElementById('garden-canvas');
+      if (!canvas) return;
+      const keys = Object.keys(flowerVarieties);
+      const type = forcedType && forcedType !== 'random'
+        ? forcedType
+        : keys[Math.floor(Math.random() * keys.length)];
+
+      const flowerObj = {
+        id: 'fl_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+        type,
+        x: xPercent,
+        y: yPercent,
+        level: 1
+      };
+      gardenFlowers.push(flowerObj);
+
+      const el = document.createElement('div');
+      el.className = 'planted-flower';
+      el.id = flowerObj.id;
+      el.style.left = xPercent + '%';
+      el.style.bottom = (100 - yPercent) + '%';
+      el.innerHTML = createFlowerSVG(type, 1);
+
+      el.onclick = (e) => {
+        e.stopPropagation();
+        interactWithFlower(flowerObj, el);
+      };
+
+      canvas.appendChild(el);
+      updateFlowerCounter();
+      spawnFloatingFx(xPercent, yPercent - 8, '✨');
+
+      const speech = document.getElementById('flower-speech');
+      if (speech) {
+        const msg = CONFIG.pesanBunga[Math.floor(Math.random() * CONFIG.pesanBunga.length)];
+        speech.innerText = `${flowerVarieties[type].name}: "${msg}"`;
+      }
+      playChime(587.33 + Math.random() * 220, 'sine', 0.22);
+    }
+
+    function interactWithFlower(flowerObj, el) {
+      const speech = document.getElementById('flower-speech');
+      if (selectedGardenTool === 'water') {
+        if (flowerObj.level < 3) {
+          flowerObj.level++;
+          el.innerHTML = createFlowerSVG(flowerObj.type, flowerObj.level);
+          spawnFloatingFx(flowerObj.x, flowerObj.y - 12, '💧✨');
+          if (speech) {
+            speech.innerText = `Yeay! ${flowerVarieties[flowerObj.type].name} tumbuh jadi Level ${flowerObj.level}! 🌟`;
+          }
+          playChime(880, 'triangle', 0.24);
+        } else {
+          spawnFloatingFx(flowerObj.x, flowerObj.y - 12, '💖');
+          if (speech) {
+            speech.innerText = `${flowerVarieties[flowerObj.type].name} ini sudah raksasa maksimal seperti cintaku padamu! 💕`;
+          }
+        }
+      } else {
+        spawnFloatingFx(flowerObj.x, flowerObj.y - 10, '🌸');
+        if (speech) {
+          const msg = CONFIG.pesanBunga[Math.floor(Math.random() * CONFIG.pesanBunga.length)];
+          speech.innerText = `"${msg}"`;
+        }
+        playChime(783.99, 'sine', 0.18);
+      }
+    }
+
+    function handleGardenTap(event) {
+      const canvas = document.getElementById('garden-canvas');
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const xPercent = Math.max(8, Math.min(92, ((event.clientX - rect.left) / rect.width) * 100));
+      let yPercent = ((event.clientY - rect.top) / rect.height) * 100;
+      yPercent = Math.max(58, Math.min(86, yPercent));
+
+      if (selectedGardenTool === 'water') {
+        spawnFloatingFx(xPercent, yPercent - 6, '💧');
+        const speech = document.getElementById('flower-speech');
+        if (speech) {
+          speech.innerText = 'Ketuk tepat di atas bunga yang sudah tumbuh untuk menyiramnya! 🚿';
+        }
+        playChime(523.25, 'sine', 0.15);
+        return;
+      }
+
+      plantFlowerAt(xPercent, yPercent, selectedGardenTool);
+    }
+
+    function rainbowRain() {
+      const rainbow = document.getElementById('garden-rainbow');
+      if (rainbow) {
+        rainbow.classList.add('visible');
+        setTimeout(() => rainbow.classList.remove('visible'), 5500);
+      }
+      gardenFlowers.forEach((f) => {
+        if (f.level < 3) {
+          f.level++;
+          const el = document.getElementById(f.id);
+          if (el) el.innerHTML = createFlowerSVG(f.type, f.level);
+        }
+        spawnFloatingFx(f.x, f.y - 12, '🌈');
+      });
+      const speech = document.getElementById('flower-speech');
+      if (speech) {
+        speech.innerText = 'Hujan pelangi turun! Semua bungamu ikut tumbuh makin subur & cantik! 🌈💖';
+      }
+      playChime(1046.5, 'triangle', 0.35);
+    }
+
+    function magicFertilizer() {
+      for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+          const rx = 12 + Math.random() * 76;
+          const ry = 60 + Math.random() * 24;
+          plantFlowerAt(rx, ry, 'random');
+        }, i * 140);
+      }
+    }
+
+    function clearGarden() {
+      document.querySelectorAll('.planted-flower').forEach(el => el.remove());
+      gardenFlowers = [];
+      updateFlowerCounter();
+      seedStarterFlowers();
+      const speech = document.getElementById('flower-speech');
+      if (speech) {
+        speech.innerText = 'Taman sudah dirapikan dengan 3 bunga pembuka baru! 🌱';
+      }
+    }
+
+    function seedStarterFlowers() {
+      plantFlowerAt(26, 74, 'tulip');
+      plantFlowerAt(50, 78, 'sunflower');
+      plantFlowerAt(74, 72, 'sakura');
+    }
+
+    // Studio Rangkai Buket
+    function openBouquetStudio() {
+      const modal = document.getElementById('bouquet-modal');
+      const canvas = document.getElementById('bouquet-canvas');
+      if (!modal || !canvas) return;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, 320, 320);
+
+      // Background lembut
+      const bg = ctx.createLinearGradient(0, 0, 0, 320);
+      bg.addColorStop(0, '#fff0f6');
+      bg.addColorStop(1, '#ffe5ec');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, 320, 320);
+
+      // Kertas pembungkus buket belakang
+      ctx.fillStyle = '#ffc2d1';
+      ctx.beginPath();
+      ctx.moveTo(160, 290);
+      ctx.lineTo(65, 115);
+      ctx.lineTo(255, 115);
+      ctx.closePath();
+      ctx.fill();
+
+      // Bunga-bunga dalam buket
+      const sample = gardenFlowers.length > 0
+        ? gardenFlowers.slice(-9)
+        : [{ type: 'tulip' }, { type: 'sunflower' }, { type: 'sakura' }, { type: 'rose' }, { type: 'lavender' }];
+
+      const spots = [
+        [160, 115], [125, 125], [195, 125],
+        [105, 150], [160, 145], [215, 150],
+        [135, 168], [185, 168], [160, 95]
+      ];
+
+      sample.forEach((f, idx) => {
+        const [bx, by] = spots[idx % spots.length];
+        const v = flowerVarieties[f.type] || flowerVarieties.tulip;
+        // Batang
+        ctx.strokeStyle = '#40916c';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(bx, by);
+        ctx.lineTo(160, 255);
+        ctx.stroke();
+
+        // Kelopak
+        ctx.fillStyle = v.color;
+        for (let p = 0; p < 5; p++) {
+          const ang = (p * Math.PI * 2) / 5;
+          ctx.beginPath();
+          ctx.arc(bx + Math.cos(ang) * 10, by + Math.sin(ang) * 10, 9, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.fillStyle = v.accent;
+        ctx.beginPath();
+        ctx.arc(bx, by, 6, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // Kertas depan & Pita
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+      ctx.beginPath();
+      ctx.moveTo(160, 292);
+      ctx.lineTo(95, 175);
+      ctx.lineTo(160, 200);
+      ctx.lineTo(225, 175);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = '#ff4d6d';
+      ctx.beginPath();
+      ctx.arc(160, 222, 10, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Kartu Ucapan Kecil
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(85, 265, 150, 34);
+      ctx.strokeStyle = '#ff8fa3';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(85, 265, 150, 34);
+
+      ctx.fillStyle = '#d6336c';
+      ctx.font = 'bold 13px Quicksand, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`Untuk ${CONFIG.namaPacar} 💖`, 160, 286);
+    }
+
+    function closeBouquetStudio() {
+      const modal = document.getElementById('bouquet-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function downloadBouquet() {
+      const canvas = document.getElementById('bouquet-canvas');
+      if (!canvas) return;
+      const link = document.createElement('a');
+      link.download = `buket-bunga-${CONFIG.namaPacar.toLowerCase()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    // =========================================================================
+    // 2. LOGIKA KUCING MOCHI & METERAN KASIH SAYANG
+    // =========================================================================
+    let mochiLove = 20;
+    const mochiOutfits = ['none', 'acc-glasses', 'acc-strawberry', 'acc-crown'];
+    let mochiOutfitIdx = 0;
+
+    function addMochiLove(amount) {
+      mochiLove = Math.min(100, mochiLove + amount);
+      const bar = document.getElementById('mochi-love-bar');
+      const pct = document.getElementById('mochi-love-pct');
+      if (bar) bar.style.width = mochiLove + '%';
+      if (pct) pct.innerText = mochiLove + '%';
+
+      if (mochiLove === 100) {
+        const speech = document.getElementById('mochi-speech');
+        if (speech) {
+          speech.innerText = `🎉 Kasih sayang Mochi 100%! Mochi sayang banget sama ${CONFIG.namaPacar}! 💖`;
+        }
+        launchFireworks();
+        mochiLove = 25;
+        setTimeout(() => {
+          if (bar) bar.style.width = '25%';
+          if (pct) pct.innerText = '25%';
+        }, 2500);
+      }
+    }
+
+    function animateMochi(cls) {
+      const svg = document.getElementById('mochi-svg');
+      if (!svg) return;
+      svg.classList.remove('mochi-jump', 'mochi-wiggle');
+      void svg.offsetWidth;
+      svg.classList.add(cls);
+    }
+
+    function petMochi() {
+      animateMochi('mochi-jump');
+      addMochiLove(15);
+      const speech = document.getElementById('mochi-speech');
+      if (speech) {
+        speech.innerText = CONFIG.ucapanMochi[Math.floor(Math.random() * CONFIG.ucapanMochi.length)];
+      }
+      playChime(783.99, 'sine', 0.2);
+    }
+
+    function feedMochi() {
+      animateMochi('mochi-jump');
+      addMochiLove(20);
+      const speech = document.getElementById('mochi-speech');
+      if (speech) {
+        speech.innerText = 'Nyam nyam~ Stroberinya manis banget, persis kayak yang ngasih! 🍓😻';
+      }
+      playChime(987.77, 'triangle', 0.22);
+    }
+
+    function tickleMochi() {
+      animateMochi('mochi-wiggle');
+      addMochiLove(15);
+      const speech = document.getElementById('mochi-speech');
+      if (speech) {
+        speech.innerText = 'Hihihi geli tauuu! Jangan digelitikin terus dong meoww~ 😹🐾';
+      }
+      playChime(1174.66, 'sine', 0.18);
+    }
+
+    function cycleMochiOutfit() {
+      mochiOutfitIdx = (mochiOutfitIdx + 1) % mochiOutfits.length;
+      mochiOutfits.forEach((id, idx) => {
+        if (id === 'none') return;
+        const el = document.getElementById(id);
+        if (el) {
+          if (idx === mochiOutfitIdx) {
+            el.classList.remove('acc-hidden');
+          } else {
+            el.classList.add('acc-hidden');
+          }
+        }
+      });
+      animateMochi('mochi-jump');
+      addMochiLove(10);
+      const names = ['Polos Gemas', 'Kacamata Kece 😎', 'Topi Stroberi 🍓', 'Mahkota Bunga 🌸'];
+      const speech = document.getElementById('mochi-speech');
+      if (speech) {
+        speech.innerText = `Tadaaa! Mochi sekarang pakai gaya: ${names[mochiOutfitIdx]} ✨`;
+      }
+      playChime(880, 'triangle', 0.2);
+    }
+
+    // =========================================================================
+    // 3. STUDIO FOTO ANIMASI KITA
+    // =========================================================================
+    let uploadedPhotoImg = null;
+    let currentAnimeFilter = 'anime';
+    let activeStickers = { ears: false, crown: false, sparkles: true };
+
+    function loadDefaultConfiguredPhoto() {
+      if (!CONFIG.fotoUtama) return;
+      const img = new Image();
+      img.onload = () => {
+        uploadedPhotoImg = img;
+        renderAnimePhotoCanvas();
+      };
+      img.onerror = () => {
+        // Jika foto-kita.jpg belum ditaruh di folder, tetap tampilkan ilustrasi pasangan lucu
+        renderAnimePhotoCanvas();
+      };
+      img.src = CONFIG.fotoUtama;
+    }
+
+    function handlePhotoUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          uploadedPhotoImg = img;
+          renderAnimePhotoCanvas();
+          playChime(880, 'sine', 0.22);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function setAnimeFilter(filter) {
+      currentAnimeFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        if (btn.dataset.filter === filter) {
+          btn.classList.add('tool-active');
+        } else {
+          btn.classList.remove('tool-active');
+        }
+      });
+      renderAnimePhotoCanvas();
+      playChime(659.25, 'sine', 0.14);
+    }
+
+    function togglePhotoSticker(key) {
+      activeStickers[key] = !activeStickers[key];
+      document.querySelectorAll('.sticker-btn').forEach(btn => {
+        if (btn.dataset.sticker === key) {
+          btn.classList.toggle('tool-active', activeStickers[key]);
+        }
+      });
+      renderAnimePhotoCanvas();
+      playChime(783.99, 'sine', 0.14);
+    }
+
+    function renderAnimePhotoCanvas() {
+      const canvas = document.getElementById('anime-photo-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      if (uploadedPhotoImg) {
+        // Crop tengah persegi
+        const size = Math.min(uploadedPhotoImg.width, uploadedPhotoImg.height);
+        const sx = (uploadedPhotoImg.width - size) / 2;
+        const sy = (uploadedPhotoImg.height - size) / 2;
+        ctx.drawImage(uploadedPhotoImg, sx, sy, size, size, 0, 0, w, h);
+
+        // Efek Cel-Shaded / Posterize lembut
+        const imgData = ctx.getImageData(0, 0, w, h);
+        const data = imgData.data;
+        const levels = currentAnimeFilter === 'anime' ? 7 : currentAnimeFilter === 'pastel' ? 9 : 11;
+        const step = 255 / levels;
+
+        for (let i = 0; i < data.length; i += 4) {
+          let r = Math.round(data[i] / step) * step;
+          let g = Math.round(data[i + 1] / step) * step;
+          let b = Math.round(data[i + 2] / step) * step;
+
+          if (currentAnimeFilter === 'pastel') {
+            r = Math.min(255, r * 0.92 + 28);
+            g = Math.min(255, g * 0.9 + 24);
+            b = Math.min(255, b * 0.94 + 32);
+          } else if (currentAnimeFilter === 'ghibli') {
+            r = Math.min(255, r * 1.04 + 8);
+            g = Math.min(255, g * 1.07 + 10);
+            b = Math.min(255, b * 0.96 + 6);
+          } else {
+            r = Math.min(255, r * 1.08 + 6);
+            g = Math.min(255, g * 1.02 + 4);
+            b = Math.min(255, b * 1.06 + 8);
+          }
+          data[i] = r;
+          data[i + 1] = g;
+          data[i + 2] = b;
+        }
+        ctx.putImageData(imgData, 0, 0);
+      } else {
+        // Ilustrasi Kartun Pasangan Default sebelum upload foto
+        const grad = ctx.createLinearGradient(0, 0, 0, h);
+        grad.addColorStop(0, currentAnimeFilter === 'ghibli' ? '#bde0fe' : '#ffe5ec');
+        grad.addColorStop(1, '#fff0f6');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, w, h);
+
+        // Karakter Kiri & Kanan
+        ctx.fillStyle = '#ffd6a5';
+        ctx.beginPath();
+        ctx.arc(105, 155, 36, 0, Math.PI * 2);
+        ctx.arc(175, 155, 36, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Mata & Senyum
+        ctx.fillStyle = '#4a2545';
+        ctx.beginPath();
+        ctx.arc(95, 152, 4, 0, Math.PI * 2);
+        ctx.arc(115, 152, 4, 0, Math.PI * 2);
+        ctx.arc(165, 152, 4, 0, Math.PI * 2);
+        ctx.arc(185, 152, 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.font = 'bold 13px Quicksand, sans-serif';
+        ctx.fillStyle = '#d6336c';
+        ctx.textAlign = 'center';
+        ctx.fillText('Upload foto kalian biar jadi Anime! 📸', w / 2, 230);
+      }
+
+      // Bingkai Vignette Lembut
+      ctx.strokeStyle = 'rgba(255, 92, 138, 0.35)';
+      ctx.lineWidth = 8;
+      ctx.strokeRect(4, 4, w - 8, h - 8);
+
+      // Gambar Stiker Aktif
+      ctx.font = '34px sans-serif';
+      ctx.textAlign = 'center';
+      if (activeStickers.ears) {
+        ctx.fillText('🐱', w / 2, 54);
+      }
+      if (activeStickers.crown) {
+        ctx.fillText('👑', w / 2, 48);
+      }
+      if (activeStickers.sparkles) {
+        ctx.font = '24px sans-serif';
+        ctx.fillText('💖', 36, 46);
+        ctx.fillText('✨', w - 36, 46);
+        ctx.fillText('🌸', 36, h - 24);
+        ctx.fillText('💕', w - 36, h - 24);
+      }
+    }
+
+    function downloadAnimePhoto() {
+      const canvas = document.getElementById('anime-photo-canvas');
+      if (!canvas) return;
+      const link = document.createElement('a');
+      link.download = `foto-animasi-${CONFIG.namaPacar.toLowerCase()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      playChime(987.77, 'triangle', 0.22);
+    }
+
+    // =========================================================================
+    // 4A. SCANNER TINGKAT GEMES
+    // =========================================================================
+    function runCutenessScanner() {
+      const res = document.getElementById('scanner-result');
+      if (!res) return;
+      res.innerText = '🔍 Memindai kadar keimutan & senyuman...';
+      playChime(523.25, 'sine', 0.15);
+
+      const diagnoses = [
+        `⚠️ WARNING: Keimutan ${CONFIG.namaPacar} terdeteksi 9999%! Obat: Traktir Es Krim segera! 🍦`,
+        `💖 Hasil Scan: 100% Manis, 0% Menyebalkan, & Layak Dipeluk Sepanjang Hari! 🤗`,
+        `🌸 Diagnosis: Terlalu cantik untuk cemberut! Wajib senyum sekarang juga 😊✨`,
+        `🧋 Radar Jajan: Terdeteksi butuh asupan Boba / Cokelat dalam 30 menit ke depan!`
+      ];
+
+      setTimeout(() => {
+        res.innerText = diagnoses[Math.floor(Math.random() * diagnoses.length)];
+        playChime(880, 'triangle', 0.25);
+      }, 650);
+    }
+
+    // =========================================================================
+    // 4B. AMPLOP "BUKA SAAT...", BISKUIT CINTA, POP-IT, PELUK & SERTIFIKAT
+    // =========================================================================
+    function initOpenWhenEnvelopes() {
+      const grid = document.getElementById('open-when-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      CONFIG.amplopSurat.forEach((item) => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-pill bg-pink-50 hover:bg-pink-100 border border-pink-200 rounded-2xl p-3 text-center space-y-1';
+        btn.innerHTML = `<div class="text-2xl">${item.icon}</div><div class="text-xs font-bold text-pink-700">${item.label}</div>`;
+        btn.onclick = () => openLetterModal(item.icon, item.judul, item.isi);
+        grid.appendChild(btn);
+      });
+    }
+
+    let fortuneIdx = 0;
+    function crackFortuneCookie() {
+      const btn = document.getElementById('fortune-cookie-btn');
+      const msgEl = document.getElementById('fortune-message');
+      const missionEl = document.getElementById('fortune-mission');
+      if (btn) {
+        btn.classList.remove('cookie-cracked');
+        void btn.offsetWidth;
+        btn.classList.add('cookie-cracked');
+      }
+      const item = CONFIG.ramalanBiskuit[fortuneIdx % CONFIG.ramalanBiskuit.length];
+      fortuneIdx++;
+      if (msgEl) msgEl.innerText = `"${item.pesan}"`;
+      if (missionEl) missionEl.innerText = item.misi;
+      playChime(783.99, 'triangle', 0.16);
+      setTimeout(() => playChime(1046.5, 'triangle', 0.22), 110);
+    }
+
+    let popitTotalCount = 0;
+    function initPopItGrid() {
+      const grid = document.getElementById('popit-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      const icons = ['💖', '🌸', '🍓', '✨', '🌷', '🐾'];
+      for (let i = 0; i < 18; i++) {
+        const bubble = document.createElement('div');
+        bubble.className = 'popit-bubble';
+        bubble.innerText = icons[i % icons.length];
+        bubble.onclick = () => {
+          bubble.classList.toggle('popped');
+          popitTotalCount++;
+          const counterEl = document.getElementById('popit-counter');
+          if (counterEl) counterEl.innerText = popitTotalCount;
+          playChime(bubble.classList.contains('popped') ? 520 + (i % 6) * 45 : 680, 'sine', 0.09);
+
+          const allBubbles = grid.querySelectorAll('.popit-bubble');
+          const poppedCount = grid.querySelectorAll('.popit-bubble.popped').length;
+          if (poppedCount === allBubbles.length) {
+            playChime(880, 'triangle', 0.25);
+            setTimeout(() => resetPopItGrid(), 750);
+          }
+        };
+        grid.appendChild(bubble);
+      }
+    }
+
+    function resetPopItGrid() {
+      const grid = document.getElementById('popit-grid');
+      if (!grid) return;
+      grid.querySelectorAll('.popit-bubble').forEach(b => b.classList.remove('popped'));
+      playChime(659.25, 'sine', 0.14);
+    }
+
+    let totalAffectionSent = 0;
+    let lastAffectionLabel = 'Peluk Hangat';
+    function sendVirtualAffection(emoji, label) {
+      totalAffectionSent++;
+      lastAffectionLabel = label;
+      const totalEl = document.getElementById('affection-total');
+      if (totalEl) totalEl.innerText = totalAffectionSent;
+
+      for (let i = 0; i < 4; i++) {
+        setTimeout(() => {
+          const fly = document.createElement('div');
+          fly.className = 'affection-fly';
+          fly.innerText = emoji;
+          fly.style.left = (25 + Math.random() * 50) + 'vw';
+          document.body.appendChild(fly);
+          setTimeout(() => fly.remove(), 1400);
+        }, i * 110);
+      }
+      playChime(783.99 + Math.random() * 180, 'sine', 0.18);
+    }
+
+    function claimAffectionToWA() {
+      const count = Math.max(1, totalAffectionSent);
+      const text = `Halo sayang! Aku ngirim ${count}x kasih sayang virtual (${lastAffectionLabel}) dari web kamu nih 🤗💖 Jangan lupa dibales di dunia nyata ya!`;
+      window.open(`https://wa.me/${CONFIG.nomorWhatsApp}?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    function renderCuteCertificate() {
+      const canvas = document.getElementById('certificate-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      const bg = ctx.createLinearGradient(0, 0, w, h);
+      bg.addColorStop(0, '#fff0f6');
+      bg.addColorStop(0.5, '#ffffff');
+      bg.addColorStop(1, '#fff3bf');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.strokeStyle = '#ff758f';
+      ctx.lineWidth = 6;
+      ctx.strokeRect(14, 14, w - 28, h - 28);
+
+      ctx.strokeStyle = '#ffd166';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(22, 22, w - 44, h - 44);
+
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#d6336c';
+      ctx.font = 'bold 20px Fredoka, Quicksand, sans-serif';
+      ctx.fillText('🏆 SERTIFIKAT PENGHARGAAN RESMI 🏆', w / 2, 66);
+
+      ctx.fillStyle = '#6d597a';
+      ctx.font = 'bold 13px Quicksand, sans-serif';
+      ctx.fillText('Dengan penuh cinta diberikan kepada:', w / 2, 102);
+
+      ctx.fillStyle = '#ff4d6d';
+      ctx.font = 'bold 30px Fredoka, Quicksand, sans-serif';
+      ctx.fillText(`💖 ${CONFIG.namaPacar} 💖`, w / 2, 146);
+
+      ctx.fillStyle = '#4a2545';
+      ctx.font = 'bold 14px Quicksand, sans-serif';
+      ctx.fillText('Sebagai Pacar Paling Cantik, Menggemaskan,', w / 2, 186);
+      ctx.fillText('& Selalu Berhasil Bikin Hari-Hariku Bahagia 🌸', w / 2, 208);
+
+      ctx.fillStyle = '#f59f00';
+      ctx.font = 'bold 12px Quicksand, sans-serif';
+      ctx.fillText('✨ Berlaku Seumur Hidup & Tidak Bisa Diganggu Gugat ✨', w / 2, 248);
+
+      ctx.fillStyle = '#c9184a';
+      ctx.font = 'bold 12px Quicksand, sans-serif';
+      ctx.fillText('Tertanda: Yang Selalu Sayang Kamu 💕', w / 2, 280);
+    }
+
+    function downloadCertificate() {
+      const canvas = document.getElementById('certificate-canvas');
+      if (!canvas) return;
+      const link = document.createElement('a');
+      link.download = `sertifikat-pacar-tergemes-${CONFIG.namaPacar.toLowerCase()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      playChime(987.77, 'triangle', 0.24);
+    }
+
+    function openLetterModal(icon, title, body) {
+      const modal = document.getElementById('letter-modal');
+      if (!modal) return;
+      document.getElementById('letter-modal-icon').innerText = icon;
+      document.getElementById('letter-modal-title').innerText = title;
+      document.getElementById('letter-modal-body').innerText = body;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      playChime(783.99, 'sine', 0.2);
+    }
+
+    function closeLetterModal() {
+      const modal = document.getElementById('letter-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    // =========================================================================
+    // 4G. RODA KEBERUNTUNGAN ANTI-"TERSERAH"
+    // =========================================================================
+    let wheelAngle = 0;
+    let isWheelSpinning = false;
+    let lastWheelPrize = '';
+
+    function drawWheelCanvas() {
+      const canvas = document.getElementById('wheel-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const items = CONFIG.hadiahRoda;
+      const arc = (Math.PI * 2) / items.length;
+      const colors = ['#ff758f', '#ffb703', '#8ecae6', '#ff8fa3', '#b5179e', '#52b788'];
+
+      ctx.clearRect(0, 0, 240, 240);
+      items.forEach((label, i) => {
+        const start = wheelAngle + i * arc;
+        const end = start + arc;
+
+        ctx.beginPath();
+        ctx.moveTo(120, 120);
+        ctx.arc(120, 120, 114, start, end);
+        ctx.closePath();
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.save();
+        ctx.translate(120, 120);
+        ctx.rotate(start + arc / 2);
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 11px Quicksand, sans-serif';
+        ctx.fillText(label, 102, 4);
+        ctx.restore();
+      });
+
+      ctx.beginPath();
+      ctx.arc(120, 120, 18, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+    }
+
+    function spinDateWheel() {
+      if (isWheelSpinning) return;
+      isWheelSpinning = true;
+      const spinVelocity = 0.35 + Math.random() * 0.25;
+      let currentVel = spinVelocity;
+
+      function animateSpin() {
+        wheelAngle += currentVel;
+        currentVel *= 0.975;
+        drawWheelCanvas();
+
+        if (currentVel > 0.003) {
+          requestAnimationFrame(animateSpin);
+        } else {
+          isWheelSpinning = false;
+          const items = CONFIG.hadiahRoda;
+          const arc = (Math.PI * 2) / items.length;
+          const normalized = ((Math.PI * 1.5 - wheelAngle) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+          const idx = Math.floor(normalized / arc) % items.length;
+          lastWheelPrize = items[idx];
+
+          const box = document.getElementById('wheel-result-box');
+          const claimBtn = document.getElementById('claim-wheel-btn');
+          if (box) box.innerText = `🎉 Yeay! Kamu dapet: ${lastWheelPrize}!`;
+          if (claimBtn) claimBtn.classList.remove('hidden');
+          playChime(1046.5, 'triangle', 0.3);
+        }
+      }
+      requestAnimationFrame(animateSpin);
+    }
+
+    function sendWheelResultToWA() {
+      if (!lastWheelPrize) return;
+      const msg = `Halo sayang! Aku abis putar Roda Keberuntungan di web kamu dan dapet: *${lastWheelPrize}* 🎉💖 Kapan kita gas nih?`;
+      window.open(`https://wa.me/${CONFIG.nomorWhatsApp}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    // =========================================================================
+    // 4H. MINI-GAME MOCHI TANGKAP CINTA
+    // =========================================================================
+    let gameRunning = false;
+    let gameScore = 0;
+    let gameMochiX = 180;
+    let fallingItems = [];
+    let gameFrameId = null;
+
+    function moveGameMochi(dx) {
+      gameMochiX = Math.max(28, Math.min(332, gameMochiX + dx));
+    }
+
+    function startCatchGame() {
+      gameRunning = true;
+      gameScore = 0;
+      fallingItems = [];
+      const scoreEl = document.getElementById('game-score');
+      const overlay = document.getElementById('game-overlay-msg');
+      if (scoreEl) scoreEl.innerText = '0';
+      if (overlay) overlay.classList.add('hidden');
+      if (gameFrameId) cancelAnimationFrame(gameFrameId);
+      runGameLoop();
+    }
+
+    function runGameLoop() {
+      if (!gameRunning) return;
+      const canvas = document.getElementById('catch-game-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, 360, 240);
+
+      // Spawn item jatuh
+      if (Math.random() < 0.045) {
+        const pool = [
+          { icon: '🍓', pts: 15 },
+          { icon: '🌸', pts: 10 },
+          { icon: '💖', pts: 20 },
+          { icon: '⛈️', pts: -15 }
+        ];
+        const pick = pool[Math.floor(Math.random() * pool.length)];
+        fallingItems.push({
+          x: 24 + Math.random() * 312,
+          y: -15,
+          speed: 2.3 + Math.random() * 1.4,
+          icon: pick.icon,
+          pts: pick.pts
+        });
+      }
+
+      // Gambar Mochi pemain
+      ctx.font = '34px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('🐱', gameMochiX, 222);
+
+      // Update & gambar item
+      for (let i = fallingItems.length - 1; i >= 0; i--) {
+        const it = fallingItems[i];
+        it.y += it.speed;
+        ctx.font = '24px sans-serif';
+        ctx.fillText(it.icon, it.x, it.y);
+
+        if (Math.abs(it.x - gameMochiX) < 28 && it.y > 188 && it.y < 232) {
+          gameScore = Math.max(0, gameScore + it.pts);
+          const scoreEl = document.getElementById('game-score');
+          if (scoreEl) scoreEl.innerText = gameScore;
+          playChime(it.pts > 0 ? 880 : 260, 'sine', 0.14);
+          fallingItems.splice(i, 1);
+
+          if (gameScore >= 100) {
+            gameRunning = false;
+            const overlay = document.getElementById('game-overlay-msg');
+            if (overlay) overlay.classList.remove('hidden');
+            launchFireworks();
+            openLetterModal(
+              '🏆',
+              `Selamat ${CONFIG.namaPacar}!`,
+              'Kamu berhasil kumpulin 100 poin! Hadiahnya: Kamu berhak minta traktiran apa aja pas kita ketemu nanti! Love you! 💖✨'
+            );
+            return;
+          }
+          continue;
+        }
+
+        if (it.y > 255) {
+          fallingItems.splice(i, 1);
+        }
+      }
+
+      gameFrameId = requestAnimationFrame(runGameLoop);
+    }
+
+    // =========================================================================
+    // 5. TOMBOL KABUR, KEMBANG API & DARURAT NGAMBEK
+    // =========================================================================
+    function moveRunawayBtn() {
+      const box = document.getElementById('dodge-playground');
+      const btn = document.getElementById('runaway-btn');
+      if (!box || !btn) return;
+      const maxX = box.clientWidth - btn.offsetWidth - 16;
+      const maxY = box.clientHeight - btn.offsetHeight - 12;
+      btn.style.position = 'absolute';
+      btn.style.left = Math.max(8, Math.random() * maxX) + 'px';
+      btn.style.top = Math.max(8, Math.random() * maxY) + 'px';
+      playChime(440, 'sine', 0.1);
+    }
+
+    function answerYes() {
+      const fb = document.getElementById('love-answer-feedback');
+      if (fb) {
+        fb.classList.remove('hidden');
+        fb.innerText = `Yeay! Aku juga sayang banget sama ${CONFIG.namaPacar} selamanya! 💖🎉`;
+      }
+      launchFireworks();
+      playChime(1046.5, 'triangle', 0.3);
+    }
+
+    function triggerEmergencyNgambek() {
+      const modal = document.getElementById('ngambek-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+      playChime(659.25, 'sine', 0.22);
+    }
+
+    function closeNgambekModal() {
+      const modal = document.getElementById('ngambek-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function sendNgambekToWhatsApp() {
+      const msg = `Halo sayang! Aku pencet Tombol Darurat Ngambek di web kamu nih 🥺💐 Klaim 1x Jajan Bebas / Es Krim / Boba sekarang ya!`;
+      window.open(`https://wa.me/${CONFIG.nomorWhatsApp}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    function launchFireworks() {
+      const canvas = document.getElementById('fireworks-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+      const colors = ['#ff4d6d', '#ffb703', '#00bbf9', '#9b5de5', '#00f5d4'];
+      for (let b = 0; b < 4; b++) {
+        const cx = (0.2 + b * 0.2) * canvas.width;
+        const cy = (0.25 + (b % 2) * 0.15) * canvas.height;
+        for (let i = 0; i < 28; i++) {
+          const ang = (Math.PI * 2 * i) / 28;
+          const spd = 2 + Math.random() * 4;
+          particles.push({
+            x: cx,
+            y: cy,
+            vx: Math.cos(ang) * spd,
+            vy: Math.sin(ang) * spd,
+            alpha: 1,
+            color: colors[(b + i) % colors.length]
+          });
+        }
+      }
+
+      function step() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let alive = false;
+        particles.forEach((p) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.06;
+          p.alpha -= 0.018;
+          if (p.alpha > 0) {
+            alive = true;
+            ctx.globalAlpha = p.alpha;
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        });
+        ctx.globalAlpha = 1;
+        if (alive) {
+          requestAnimationFrame(step);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    // =========================================================================
+    // INISIALISASI SAAT HALAMAN SIAP
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      const titleEl = document.getElementById('page-title');
+      if (titleEl) {
+        titleEl.innerText = `Taman Bunga & Mochi Untuk ${CONFIG.namaPacar} 🌸`;
+      }
+      const headingEl = document.getElementById('main-heading');
+      if (headingEl) {
+        headingEl.innerText = `Halo ${CONFIG.namaPacar}! 💖`;
+      }
+
+      const gameCanvas = document.getElementById('catch-game-canvas');
+      if (gameCanvas) {
+        gameCanvas.addEventListener('pointermove', (e) => {
+          if (!gameRunning) return;
+          const rect = gameCanvas.getBoundingClientRect();
+          const relX = ((e.clientX - rect.left) / rect.width) * gameCanvas.width;
+          gameMochiX = Math.max(28, Math.min(332, relX));
+        });
+      }
+
+      initAmbientParticles();
+      renderGardenCritters();
+      seedStarterFlowers();
+      renderAnimePhotoCanvas();
+      loadDefaultConfiguredPhoto();
+      initOpenWhenEnvelopes();
+      initPopItGrid();
+      renderCuteCertificate();
+      drawWheelCanvas();
+    });
+  </script>
+</body>
+</html>
